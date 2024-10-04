@@ -10,21 +10,24 @@
 class Packet {
 public:
     Packet();
-    byte senderAddress[4];
-    String state;
-private:
+    bool checkHeaderCRC8(byte CRC8H);
     void handleTelegram();
-    void handleRPSTelegram();
-    bool checkHeaderCRC8();
-    bool checkDataCRC8();
-    void getPacketLength();
-    byte header[ENOCEAN_HEADER];
-    byte payload[ENOCEAN_MAX_DATA];
+    bool checkDataCRC8(byte CRC8D);
+    byte* getHeader();
+    String getState();
+    byte* getSenderAddress();
+    uint8_t payloadLength;
     byte enocean_data[ENOCEAN_MAX_DATA];
     byte enocean_optional[ENOCEAN_MAX_DATA];
     uint8_t optionalLength;
     uint8_t dataLength;
-    uint8_t payloadLength;
+private:
+    byte senderAddress[4];
+    String state;
+    byte header[ENOCEAN_HEADER];
+    void handleRPSTelegram();
+    void getPacketLength();
+    byte payload[ENOCEAN_MAX_DATA];
     byte rssi;
     byte type;
     CRC8 crc8{};
@@ -33,6 +36,5 @@ private:
 
 };
 
-void setupEnocean(int rxPin, int txPin);
 
 #endif // ENOCEAN_H

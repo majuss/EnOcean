@@ -22,68 +22,28 @@ Packet::Packet()
     state = 'Unknown';
     // init done
 
-    Serial2.readBytes(header, ENOCEAN_HEADER);
-    type = header[3];
-
-    getPacketLength();
-    if (checkHeaderCRC8())
-    {
-        Serial.println("Header CRC8 is valid.");
-    }
-    else
-    {
-        Serial.println("Header CRC8 is invalid.");
-        return;
-    }
-
-    byte waitCounter;
-    byte available;
-    do
-    {
-        yield();
-        available = Serial2.available();
-
-    } while (available < payloadLength + 1 || waitCounter++ > 50);
-
-    if (payloadLength + 1 <= available)
-    {
-        Serial.println("read data");
-
-        Serial2.readBytes(enocean_data, dataLength);
-        Serial2.readBytes(enocean_optional, optionalLength);
-
-        if (checkDataCRC8())
-        {
-            Serial.println("Data CRC8 is valid.");
-        }
-        else
-        {
-            Serial.println("Data CRC8 is invalid.");
-            return;
-        };
-        rssi = enocean_optional[5];
-        handleTelegram();
-        // parsePacketData(data);
-    }
+    // Serial2.readBytes(header, ENOCEAN_HEADER);
+   
 }
 
-bool Packet::checkHeaderCRC8()
+bool Packet::checkHeaderCRC8(byte CRC8H)
 {
-    byte const CRC8H{Serial2.read()};
+    getPacketLength();
+    type = header[3];
     crc8.begin();
     uint8_t checksum = crc8.get_crc8(header, ENOCEAN_HEADER);
     return checksum == CRC8H;
 }
 
-bool Packet::checkDataCRC8()
+bool Packet::checkDataCRC8(byte CRC8D)
 {
-    byte CRC8D = Serial2.read();
 
     byte enocean_buffer[2 * ENOCEAN_MAX_DATA];
     memcpy(enocean_buffer, enocean_data, dataLength);
     memcpy(enocean_buffer + dataLength, enocean_optional, optionalLength);
     crc8.begin();
     uint8_t checksumData = crc8.get_crc8(enocean_buffer, payloadLength);
+    rssi = enocean_optional[5];
     return checksumData == CRC8D;
 }
 
@@ -155,8 +115,15 @@ void Packet::handleRPSTelegram()
     // Implementation of RPS handling
 }
 
-void setupEnocean(int rxPin, int txPin)
+byte* Packet::getHeader()
 {
-    Serial.println("Setup starting");
-    Serial2.begin(57600, SERIAL_8N1, rxPin, txPin);
+    return header;
+}
+String Packet::getState()
+{
+    return state;
+}
+byte* Packet::getSenderAddress()
+{
+    return senderAddress;
 }
