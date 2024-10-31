@@ -1,7 +1,3 @@
-#ifndef ENOCEAN_H
-#define ENOCEAN_H
-
-#include <Arduino.h>
 #include "CRC8.h"
 
 #define ENOCEAN_HEADER 4
@@ -35,6 +31,3 @@ private:
     byte dataBytes[4];
 
 };
-
-
-#endif // ENOCEAN_H
