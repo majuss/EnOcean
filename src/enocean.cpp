@@ -8,7 +8,6 @@ union DataLength
 
 Packet::Packet()
 {
-    // Initialize packet data
     memset(header, 0, ENOCEAN_HEADER);
     memset(payload, 0, ENOCEAN_MAX_DATA);
     memset(dataBytes, 0, sizeof(dataBytes));
@@ -16,14 +15,10 @@ Packet::Packet()
     optionalLength = 0;
     dataLength = 0;
     payloadLength = 0;
-    radioTelegramType = 'Unknown';
+    radioTelegramType = "Unknown";
     type = 0;
     rssi = 0;
-    state = 'Unknown';
-    // init done
-
-    // Serial2.readBytes(header, ENOCEAN_HEADER);
-   
+    state = "Unknown";
 }
 
 bool Packet::checkHeaderCRC8(byte CRC8H)
@@ -107,7 +102,7 @@ void Packet::handleRPSTelegram()
     {
         state = "off";
     }
-    else if (dataBytes[0] == 0xD0)
+    else
     {
         state = "unknown";
     }
