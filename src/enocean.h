@@ -27,7 +27,6 @@ private:
     void getPacketLength();
     byte payload[ENOCEAN_MAX_DATA];
     int8_t rssi;
-    byte type;
     CRC8 crc8{};
     String type;
     String radioTelegramType;
