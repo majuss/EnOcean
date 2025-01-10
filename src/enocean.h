@@ -11,7 +11,9 @@ public:
     bool checkDataCRC8(byte CRC8D);
     byte* getHeader();
     String getState();
+    String getType();
     byte* getSenderAddress();
+    int8_t getRssi();
     uint8_t payloadLength;
     byte enocean_data[ENOCEAN_MAX_DATA];
     byte enocean_optional[ENOCEAN_MAX_DATA];
@@ -24,9 +26,10 @@ private:
     void handleRPSTelegram();
     void getPacketLength();
     byte payload[ENOCEAN_MAX_DATA];
-    byte rssi;
+    int8_t rssi;
     byte type;
     CRC8 crc8{};
+    String type;
     String radioTelegramType;
     byte dataBytes[4];
 
