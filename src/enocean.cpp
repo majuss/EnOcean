@@ -17,7 +17,7 @@ Packet::Packet()
     dataLength = 0;
     payloadLength = 0;
     radioTelegramType = "Unknown";
-    type = "";
+    type = "Unknown";
     rssi = 0;
     state = "Unknown";
     // init done
